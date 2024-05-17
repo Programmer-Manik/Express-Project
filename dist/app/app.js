@@ -9,6 +9,20 @@ const port = process.env.PORT || 3000;
 //parser
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+const userRoute = express_1.default.Router();
+const courseRoute = express_1.default.Router();
+app.use('/api/users', userRoute);
+app.use('/api/courses', courseRoute);
+userRoute.get('/create-user', (req, res) => {
+    const user = req.body;
+    console.log(user);
+    res.json({ success: true, message: "Success", data: user });
+});
+courseRoute.get('/create-course', (req, res) => {
+    const course = req.body;
+    console.log(course);
+    res.json({ success: true, message: "Success", data: course });
+});
 const logger = (req, res, next) => {
     console.log(req.method, req.url, req.hostname);
     next();
