@@ -33,8 +33,18 @@ const port = process.env.PORT || 3000;
     next();
  }
 
-app.get("", logger, (req:Request, res:Response, ) => {
-  res.send("Hello World!");
+app.get("", logger, async(req:Request, res:Response, next:NextFunction) => {
+  try{
+   res.send(SomeThing);
+  }catch(err){
+   console.log(err)
+   next(err);
+   // res.status(400).json({
+   //    success: false,
+   //    message: "filed your function",
+   //    data: null
+   // })
+  }
 });
 
 app.post("/", logger, (req:Request, res:Response,) => {
@@ -42,5 +52,24 @@ app.post("/", logger, (req:Request, res:Response,) => {
     // res.send("Hello World!");
     res.json({"success": "success"})
 }); 
+
+app.all("*" , (req:Request,res:Response)=>{
+   res.status(500).json({
+      success: false,
+      message: "Route is not Found",
+  })
+})
+
+//global error handel 
+app.use((err:Error, req:Request, res:Response, next:NextFunction) => {
+  if(err){
+   res.status(500).json({
+      success: false,
+      message: err.message,
+      data: null
+  })
+  }
+})
+
 
 export default app;
